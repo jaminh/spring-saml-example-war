@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xmlns:context="http://www.springframework.org/schema/context"
+    	  xmlns:util="http://www.springframework.org/schema/util"
+          xmlns:sws="http://www.springframework.org/schema/web-services"  
+          xsi:schemaLocation="http://www.springframework.org/schema/beans  
+          	http://www.springframework.org/schema/beans/spring-beans.xsd  
+            http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd  
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd 
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<context:annotation-config/>
+	<context:component-scan base-package="com.jaminh.ws.example.endpoint"/>
+	
+	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
+		<property name="soapVersion">
+			<util:constant static-field="org.springframework.ws.soap.SoapVersion.SOAP_12"/>
+		</property>
+	</bean>
+	<sws:annotation-driven/>
+	<sws:interceptors>
+		<bean id="securityInterceptor" class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+			<property name="validationActions" value="Timestamp SAMLTokenSigned Signature"/>
+			<property name="validationSignatureCrypto" ref="crypto"/>
+		</bean>
+	</sws:interceptors>
+	
+	<bean id="crypto" class="org.springframework.ws.soap.security.wss4j.support.CryptoFactoryBean">
+	    <property name="keyStorePassword" value="password"/>
+	    <property name="defaultX509Alias" value="selfsigned"/>
+	    <property name="keyStoreLocation" value="classpath:/keystore.jks"/>
+	</bean>
+
+	<bean id="jdomProcessor" class="org.springframework.ws.server.endpoint.adapter.method.dom.JDomPayloadMethodProcessor"/>
+
+</beans>
