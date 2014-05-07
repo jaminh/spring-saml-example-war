@@ -50,8 +50,10 @@ public class HelloTest {
 		securityInterceptor.setSecurementUsername("selfsigned");
 		securityInterceptor.setSecurementPassword("password");
 		securityInterceptor.setSamlIssuer(issuer);
+		securityInterceptor.afterPropertiesSet();
 		
 		template.setInterceptors(new ClientInterceptor[] {securityInterceptor});
+		template.afterPropertiesSet();
 		
 		Element hello = new Element("Hello", "urn:jaminh:example");
 		template.sendSourceAndReceiveToResult("http://localhost:8080/spring-saml-example-war", new JDOMSource(hello), new JDOMResult());

@@ -47,7 +47,7 @@ public class SAML2CallbackHandler extends AbstractSAMLCallbackHandler {
         
         subjectName = "uid=joe,ou=people,ou=saml-demo,o=example.com";
         subjectQualifier = "www.example.com";
-        confirmationMethod = SAML2Constants.CONF_SENDER_VOUCHES;
+        confirmationMethod = SAML2Constants.CONF_HOLDER_KEY;
     }
     
     public void handle(Callback[] callbacks)
